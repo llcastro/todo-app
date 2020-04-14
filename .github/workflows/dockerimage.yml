@@ -14,8 +14,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Build the Docker image
-      run: cd backend && docker build . --file Dockerfile --tag todo-app:$(date +%s)
     - name: Login to Heroku Container registry
       env: 
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
