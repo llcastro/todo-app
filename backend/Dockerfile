@@ -17,4 +17,7 @@ RUN dotnet publish "todo-app.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "todo-app.dll"]
+#ENTRYPOINT ["dotnet", "todo-app.dll"]
+
+#only for heroku
+CMD ASPNETCORE_URLS=http://*:$PORT dotnet todo-app.dll
