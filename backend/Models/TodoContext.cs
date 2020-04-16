@@ -1,3 +1,4 @@
+using backend.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace todo_app.Models
@@ -9,5 +10,6 @@ namespace todo_app.Models
         }
 
         public DbSet<TodoItem> TodoItems { get; set; }
+        public DbSet<User> Users { get; set; }
     }
 }
