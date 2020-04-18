@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using backend.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,22 +16,26 @@ namespace todo_app.Controllers
     public class TodoItemsController : ControllerBase
     {
         private readonly TodoContext _context;
+        private readonly IMapper _mapper;
 
-        public TodoItemsController(TodoContext context)
+        public TodoItemsController(TodoContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: api/TodoItems
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItems()
+        public async Task<ActionResult<IEnumerable<TodoItemDto>>> GetTodoItems()
         {
-            return await _context.TodoItems.ToListAsync();
+            var todos = await _context.TodoItems.ToListAsync();
+
+            return _mapper.Map<List<TodoItemDto>>(todos);
         }
 
         // GET: api/TodoItems/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TodoItem>> GetTodoItem(long id)
+        public async Task<ActionResult<TodoItemDto>> GetTodoItem(long id)
         {
             var todoItem = await _context.TodoItems.FindAsync(id);
 
@@ -38,15 +44,16 @@ namespace todo_app.Controllers
                 return NotFound();
             }
 
-            return todoItem;
+            return _mapper.Map<TodoItemDto>(todoItem);
         }
 
         // PUT: api/TodoItems/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTodoItem(long id, TodoItem todoItem)
+        public async Task<ActionResult<TodoItemDto>> PutTodoItem(long id, TodoItemDto todoItemDto)
         {
+            TodoItem todoItem = _mapper.Map<TodoItem>(todoItemDto);
             if (id != todoItem.Id)
             {
                 return BadRequest();
@@ -70,15 +77,16 @@ namespace todo_app.Controllers
                 }
             }
 
-            return NoContent();
+            return _mapper.Map<TodoItemDto>(todoItem);
         }
 
         // POST: api/TodoItems
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<TodoItem>> PostTodoItem(TodoItem todoItem)
+        public async Task<ActionResult<TodoItemDto>> PostTodoItem(TodoItemDto todoItemDto)
         {
+            TodoItem todoItem = _mapper.Map<TodoItem>(todoItemDto);
             _context.TodoItems.Add(todoItem);
             await _context.SaveChangesAsync();
 

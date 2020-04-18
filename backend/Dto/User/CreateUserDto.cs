@@ -1,8 +1,11 @@
 using System.ComponentModel.DataAnnotations;
+using AutoMapper;
+using backend.Models;
 
 namespace backend.Dto
 {
-    public class UserDto
+    [AutoMap(typeof(User))]
+    public class CreateUserDto
     {
         [Required]
         public string UserName { get; set; }

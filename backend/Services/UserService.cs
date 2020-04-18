@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using backend.Dto;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
@@ -18,14 +19,16 @@ namespace backend.Services
   {
     private readonly TodoContext _context;
     private readonly IConfiguration _configuration;
-    public UserService(TodoContext context, IConfiguration configuration)
+    private readonly IMapper _mapper;
+    public UserService(TodoContext context, IConfiguration configuration, IMapper mapper)
     {
       _context = context;
       _configuration = configuration;
+      _mapper = mapper;
     }
-    public async Task<User> Authenticate(UserDto userDto)
+    public async Task<UserDto> Authenticate(string userName, string password)
     {
-      var user = await _context.Users.SingleOrDefaultAsync(e => e.Name == userDto.UserName && e.Password == userDto.Password);
+      var user = await _context.Users.SingleOrDefaultAsync(e => e.UserName == userName && e.Password == password);
 
       // return null if user not found
       if (user == null)
@@ -38,7 +41,7 @@ namespace backend.Services
       {
         Subject = new ClaimsIdentity(new Claim[] 
         {
-          new Claim(ClaimTypes.Name, user.Name.ToString())
+          new Claim(ClaimTypes.Name, user.UserName.ToString())
         }),
         Expires = DateTime.UtcNow.AddDays(7),
         SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -46,28 +49,33 @@ namespace backend.Services
       var token = tokenHandler.CreateToken(tokenDescriptor);
       user.Token = tokenHandler.WriteToken(token);
 
-      return user;
+      return _mapper.Map<UserDto>(user);
     }
 
-    public async Task<User> CreateUser(UserDto user)
+    public async Task<UserDto> CreateUser(string userName, string password)
     {
-      var u = new User()
+      var user = await _context.Users.SingleOrDefaultAsync(e => e.UserName == userName);
+
+      if (user != null)
+        throw new Exception("UserName already exists!");
+
+      user = new User()
       {
-        Name = user.UserName,
-        Password = user.Password,
+        UserName = userName,
+        Password = password,
       };
 
-      _context.Users.Add(u);
+      _context.Users.Add(user);
       await _context.SaveChangesAsync();
 
-      return u;
+      return _mapper.Map<UserDto>(user);
     }
 
-    public async Task<List<User>> GetAll()
+    public async Task<List<UserDto>> GetAll()
     {
       var user = await _context.Users.ToListAsync();
 
-      return user;
+      return _mapper.Map<List<UserDto>>(user);
     }
   }
 }

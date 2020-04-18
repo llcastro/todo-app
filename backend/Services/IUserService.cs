@@ -7,8 +7,8 @@ namespace backend.Services
 {
     public interface IUserService
     {
-        Task<User> Authenticate(UserDto user);
-        Task<User> CreateUser(UserDto user);
-        Task<List<User>> GetAll();
+        Task<UserDto> Authenticate(string userName, string password);
+        Task<UserDto> CreateUser(string userName, string password);
+        Task<List<UserDto>> GetAll();
     }
 }

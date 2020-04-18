@@ -1,7 +1,10 @@
 using System.ComponentModel.DataAnnotations;
+using AutoMapper;
+using backend.Dto;
 
 namespace todo_app.Models
 {
+    [AutoMap(typeof(TodoItemDto))]
     public class TodoItem
     {
         [Key]

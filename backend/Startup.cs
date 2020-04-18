@@ -11,6 +11,7 @@ using backend.Services;
 using System.Text;
 using System.Linq;
 using NSwag;
+using AutoMapper;
 
 namespace todo_app
 {
@@ -70,6 +71,8 @@ namespace todo_app
                     ValidateAudience = false
                 };
             });
+
+            services.AddAutoMapper(typeof(Startup));
 
             services.AddScoped<IUserService, UserService>();
         }

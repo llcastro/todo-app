@@ -20,9 +20,9 @@ namespace backend.Controllers
 
     [AllowAnonymous]
     [HttpPost("authenticate")]
-    public async Task<IActionResult> AuthenticateUser([FromBody] UserDto userDto)
+    public async Task<IActionResult> AuthenticateUser([FromBody] CreateUserDto userDto)
     {
-      var user = await _userService.Authenticate(userDto);
+      var user = await _userService.Authenticate(userDto.UserName, userDto.Password);
 
       if (user == null)
       {
@@ -34,9 +34,9 @@ namespace backend.Controllers
 
     [AllowAnonymous]
     [HttpPost]
-    public async Task<IActionResult> CreateUser([FromBody] UserDto userDto)
+    public async Task<IActionResult> CreateUser([FromBody] CreateUserDto userDto)
     {
-      var user = await _userService.CreateUser(userDto);
+      var user = await _userService.CreateUser(userDto.UserName, userDto.Password);
 
       if (user == null)
       {
