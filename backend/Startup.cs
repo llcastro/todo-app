@@ -12,6 +12,7 @@ using System.Text;
 using System.Linq;
 using NSwag;
 using AutoMapper;
+using backend.ErrorHandlers;
 
 namespace todo_app
 {
@@ -92,6 +93,8 @@ namespace todo_app
             app.UseOpenApi();
             app.UseSwaggerUi3();
             app.UseHttpsRedirection();
+
+            app.ConfigureExceptionHandlers();
 
             app.UseCors(x => x
                 .AllowAnyOrigin()

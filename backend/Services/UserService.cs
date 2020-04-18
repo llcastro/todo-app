@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using backend.CustomExceptions;
 using backend.Dto;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
@@ -57,7 +59,7 @@ namespace backend.Services
       var user = await _context.Users.SingleOrDefaultAsync(e => e.UserName == userName);
 
       if (user != null)
-        throw new Exception("UserName already exists!");
+        throw new UserFriendlyException("UserName already exists!", HttpStatusCode.Conflict);
 
       user = new User()
       {
