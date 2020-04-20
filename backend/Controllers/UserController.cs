@@ -19,7 +19,7 @@ namespace backend.Controllers
     }
 
     [AllowAnonymous]
-    [HttpPost("authenticate")]
+    [HttpPost("Authenticate")]
     public async Task<IActionResult> AuthenticateUser([FromBody] CreateUserDto userDto)
     {
       var user = await _userService.Authenticate(userDto.UserName, userDto.Password);

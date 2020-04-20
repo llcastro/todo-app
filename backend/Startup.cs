@@ -42,7 +42,7 @@ namespace todo_app
                     {
                         Name = "Luis Castro",
                         Email = "langelolcastro@gmail.com",
-                        Url = "https://github.com/llcastro"
+                        Url = "https://github.com/llcastro/todo-app"
                     };
                 };
                 config.AddSecurity("JWT Token", Enumerable.Empty<string>(),
