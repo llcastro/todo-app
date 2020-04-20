@@ -5,6 +5,7 @@ using backend.Dto;
 namespace todo_app.Models
 {
     [AutoMap(typeof(TodoItemDto))]
+    [AutoMap(typeof(CreateTodoItemDto))]
     public class TodoItem
     {
         [Key]

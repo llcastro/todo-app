@@ -84,7 +84,7 @@ namespace todo_app.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<TodoItemDto>> PostTodoItem(TodoItemDto todoItemDto)
+        public async Task<ActionResult<TodoItemDto>> PostTodoItem(CreateTodoItemDto todoItemDto)
         {
             TodoItem todoItem = _mapper.Map<TodoItem>(todoItemDto);
             _context.TodoItems.Add(todoItem);
@@ -95,7 +95,7 @@ namespace todo_app.Controllers
 
         // DELETE: api/TodoItems/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<TodoItem>> DeleteTodoItem(long id)
+        public async Task<ActionResult<TodoItemDto>> DeleteTodoItem(long id)
         {
             var todoItem = await _context.TodoItems.FindAsync(id);
             if (todoItem == null)
@@ -106,7 +106,7 @@ namespace todo_app.Controllers
             _context.TodoItems.Remove(todoItem);
             await _context.SaveChangesAsync();
 
-            return todoItem;
+            return _mapper.Map<TodoItemDto>(todoItem);
         }
 
         private bool TodoItemExists(long id)

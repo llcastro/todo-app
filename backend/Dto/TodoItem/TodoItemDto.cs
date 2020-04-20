@@ -1,9 +1,8 @@
 using AutoMapper;
-using todo_app.Models;
 
 namespace backend.Dto
 {
-    [AutoMap(typeof(TodoItem))]
+    [AutoMap(typeof(todo_app.Models.TodoItem))]
     public class TodoItemDto
     {
         public long Id { get; set; }
