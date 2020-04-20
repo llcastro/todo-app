@@ -85,6 +85,16 @@ namespace todo_app
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseHsts();
+            }
+
+            app.UseHttpsRedirection();
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
 
             app.UseAuthentication();
             app.UseRouting();
@@ -92,14 +102,8 @@ namespace todo_app
 
             app.UseOpenApi();
             app.UseSwaggerUi3();
-            app.UseHttpsRedirection();
 
             app.ConfigureExceptionHandlers();
-
-            app.UseCors(x => x
-                .AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader());
 
             app.UseEndpoints(endpoints =>
             {
